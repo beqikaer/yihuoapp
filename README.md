@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #选择城市，城市搜索弹窗
 ## 引入
 import choseCity from "@/components/chose-city/chose-city"
@@ -25,3 +26,6 @@ export default {
 showCity：弹窗是否显示
 selectCity：选择后的回调
 closeModal：点击取消的回调
+=======
+
+>>>>>>> 000e024811656e3386280e4bc5b32cd42a3e0237
