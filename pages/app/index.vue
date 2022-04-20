@@ -1,14 +1,18 @@
 <template>
 	<view>
+		
 		<!--首页-->
 		<home :scrollY="scrollY" :scrollBottom="scrollBottom" :show="tabID==0?true:false" v-if="loadOn.home" />
 
-		<!--发现-->
-		<find :scrollY="scrollY" :scrollBottom="scrollBottom" :show="tabID==1?true:false" v-if="loadOn.find" />
+		<!--分类-->
+		<goods-list :scrollY="scrollY" :scrollBottom="scrollBottom" :show="tabID==1?true:false"
+			v-if="loadOn.goodlist" />
 
-		<!--卖二手-->
+		<!--发布-->
+
 		<sell :scrollY="scrollY" :scrollBottom="scrollBottom" :show="tabID==2?true:false" v-if="loadOn.sell"
-			@closeTap="sellCloseTap" />
+					@closeTap="sellCloseTap" />
+
 
 		<!--消息-->
 		<news :scrollY="scrollY" :scrollBottom="scrollBottom" :show="tabID==3?true:false" v-if="loadOn.news" />
@@ -24,7 +28,7 @@
 <script>
 	//加载组件
 	import home from '@/components/zaiui-common/view/home';
-	import find from '@/components/zaiui-common/view/find';
+	import goodsList from '@/components/zaiui-common/view/goods-list';
 	import sell from '@/components/zaiui-common/view/sell';
 	import news from '@/components/zaiui-common/view/news';
 	import my from '@/components/zaiui-common/view/my';
@@ -37,7 +41,7 @@
 	export default {
 		components: {
 			home,
-			find,
+			goodsList,
 			sell,
 			news,
 			my,
@@ -47,11 +51,12 @@
 			return {
 				loadOn: {
 					home: true,
-					find: false,
+					goodlist: false,
 					sell: false,
 					news: false,
 					my: false
 				},
+				show: false,
 				scrollY: 0,
 				scrollBottom: 0,
 				scrollTop: 0,
@@ -66,14 +71,24 @@
 			_tool.setBarColor(true);
 		},
 		methods: {
+			change(e) {
+				this.show = e.show
+			},
+			close() {
+				this.$refs.popup.close()
+				console.log(this.loadOn)
+			},
 			tabTap(index) {
+
 				this.tabIndex = this.tabID;
-				if (index == 1 && !this.loadOn.find) {
-					this.loadOn.find = true;
+				if (index == 1 && !this.loadOn.goodlist) {
+					this.loadOn.goodlist = true;
 				}
+
 				if (index == 2 && !this.loadOn.sell) {
 					this.loadOn.sell = true;
 				}
+
 				if (index == 3 && !this.loadOn.news) {
 					this.loadOn.news = true;
 				}
@@ -86,7 +101,9 @@
 						})
 					}
 				}
+
 				this.tabID = index;
+
 				//设置颜色
 				if (index == 0) {
 					_tool.setBarColor(false);
@@ -119,5 +136,5 @@
 </script>
 
 <style lang="scss">
-	
+
 </style>

@@ -7,11 +7,11 @@
 			</view>
 			<view class="action" :class="TabID == 1?'text-red':'text-black'" @tap="tabTap(1)">
 				<view :class="TabID == 1?'cuIcon-discoverfill':'cuIcon-discover'"></view>
-				<text>发现</text>
+				<text>分类</text>
 			</view>
 			<view class="action add-action" @tap="tabTap(2)">
 				<button class="cu-btn cuIcon-add bg-red shadow"></button>
-				<text>卖二手</text>
+				<text>发布</text>
 			</view>
 			<view class="action" :class="TabID == 3?'text-red':'text-black'" @tap="tabTap(3)">
 				<view :class="TabID == 3?'cuIcon-messagefill':'cuIcon-message'">

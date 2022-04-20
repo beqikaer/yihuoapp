@@ -20,6 +20,16 @@ export default {
 			}
 		})
 	},
+	//版本升级
+	location(data) {
+		return request({
+			url: '/app/location/index',
+			method: 'POST',
+			data: {
+				...data
+			}
+		})
+	},
 
 
 }

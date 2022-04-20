@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!--标题栏-->
-		<bar-title bgColor="bg-white" isBack @rightTap="Submit">
+		<bar-title bgColor="bg-white" :isBack="true" @rightTap="Submit">
 			<block slot="content">商品资料</block>
 			<block slot="right"><button class="cu-btn bg-blue round">发布商品</button></block>
 		</bar-title>
@@ -53,11 +53,11 @@
 			<input v-model="form.goods_price" placeholder="请输入售价" name="input"></input>
 			<text class='text-orange text-bold'>元(￥)</text>
 		</view>
-		
+
 		<view class="cu-form-group">
 			<view class="title">商品库存</view>
 			<input v-model="form.goods_stock" placeholder="请输入库存" name="input"></input>
-			
+
 		</view>
 
 		<view class="cu-form-group">
@@ -69,6 +69,12 @@
 
 		<jinEdit ref="jinEdit" height="200" placeholder="请输入商品详情,可点击工具条上传图片" @editOk="editOk"></jinEdit>
 
+
+		<view class="cu-form-group margin-top">
+			<text class="cuIcon-locationfill text-orange margin-right"></text>
+			<input name="input" :value="address" disabled="disabled"></input>
+			<button class='cu-btn bg-green shadow' @tap="getLocation">重新定位</button>
+		</view>
 
 		<view class="padding flex flex-direction">
 			<button @tap="Submit" class="cu-btn bg-blue lg">发布商品</button>
@@ -96,7 +102,7 @@
 		data() {
 			return {
 				form: {
-					goods_stock:999,
+					goods_stock: 999,
 					goods_type: [], //类型为数组
 					goods_name: '',
 					goods_des: '', //描述
@@ -111,6 +117,8 @@
 					goods_vendor: '',
 					goods_label: '' //标签
 				},
+				address: "", //为了显示
+				mycity: "", //为了交互后端
 				detail: "<p>设置的内容</p>",
 				imgList: [],
 
@@ -118,6 +126,20 @@
 
 		},
 		onLoad(e) {
+
+			var mycity = uni.getStorageSync('myCity');
+
+			this.mycity = mycity;
+
+			if (mycity) {
+				console.log(mycity)
+				this.address = mycity.address.province + '-' + mycity.address.city + '-' + mycity.address.district + '-' +
+					mycity.address
+					.street
+			} else {
+				this.getLocation()
+			}
+
 			console.log(e.goods_type)
 			this.form.goods_type = this.form.goods_type.concat(e.goods_type); //类型为数组
 			var userInfo = uni.getStorageSync('userInfo');
@@ -125,6 +147,31 @@
 			this.form.goods_vendor = userInfo.member_id
 		},
 		methods: {
+			getLocation() {
+				const that = this
+				uni.getLocation({
+					// #ifdef MP-ALIPAY
+					type: 2,
+					// #endif
+					geocode: true,
+					success(res) {
+
+						this.mycity = res;
+
+						console.log('----', res)
+						this.address = res.address.province + res.address.city + res.address.district + res.address
+							.street
+						uni.setStorageSync('myCity', res)
+					},
+					fail(err) {
+						that.hasLocation = false
+						uni.showToast({
+							icon: 'none',
+							title: '获取用户定位失败，请手动选择当前城市'
+						})
+					},
+				})
+			},
 
 			async editOk(res) { //子组件执行父中方法
 				console.log(res.html)
@@ -147,6 +194,19 @@
 
 				var goods_add_res = await api.goods_add(this.form);
 				console.log(goods_add_res)
+
+				var place_info = {
+					'goods_place_position': JSON.stringify({
+						'address': this.mycity.address.province + this.mycity.address.city + this.mycity
+							.address.district + this.mycity.address,
+						'lng': this.mycity.longitude,
+						'lat': this.mycity.latitude
+					}),
+					goods_id: goods_add_res.data
+				}
+
+				var goods_place_res = await api.goods_place(place_info);
+				console.log(goods_place_res)
 
 				if (goods_add_res.status == 200) {
 					this.$util.msg(goods_add_res.msg)

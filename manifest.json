@@ -7,7 +7,8 @@
     "transformPx" : false,
     "app-plus" : {
         "modules" : {
-            "OAuth" : {}
+            "OAuth" : {},
+            "Geolocation" : {}
         },
         "privacy" : {
             "prompt" : "template",
@@ -54,6 +55,13 @@
                 "ad" : {},
                 "oauth" : {
                     "univerify" : {}
+                },
+                "geolocation" : {
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "",
+                        "appkey_android" : ""
+                    }
                 }
             },
             "splashscreen" : {

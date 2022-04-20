@@ -21,5 +21,15 @@ export default {
 				...data
 			}
 		})
-	}
+	},
+	goods_place(data) {
+		console.log("商品位置")
+		return request({
+			url: '/app/Goods.Place/add',
+			method: 'POST',
+			data: {
+				...data
+			}
+		})
+	},
 }

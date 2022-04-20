@@ -24,7 +24,7 @@ const request = (options = {}) => {
 	}
 
 	// 短信验证码也要放行
-	const whileList = ['/app/System.Version/index', '/app/Member.Member/mobile_login',
+	const whileList = ['/app/location/index','/app/System.Version/index', '/app/Member.Member/mobile_login',
 		'/app/Member.Member/find_mobile',
 		'/app/Member.Member/add_mobile', '/app/Member.Member/add', '/app/Member.Member/user_login',
 		'/app/Member.Member/find_nickname', '/app/Member.Member/sendSms', '/app/Member.Member/sms_login',
